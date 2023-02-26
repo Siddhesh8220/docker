@@ -1,0 +1,4 @@
+1.  Install docker on your machine
+2.  Go to docker hub create account and search node image.
+3.  We will be using this image to create a custom image to istall to install other dependencies that we will need  
+    to run this application. We will be creating a docker file
