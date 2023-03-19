@@ -6,7 +6,13 @@ WORKDIR /app
 
 # '.' for current directly that is app directory
 COPY package.json .   
-RUN npm install
+# RUN npm install
+
+# run npm install --only=production only if node env is production
+RUN if [ "$NODE_ENV" = "development" ]; \
+        then npm install; \
+        else npm install --only=production; \
+        fi
 
 # copy code to current directory
 COPY . ./  
@@ -14,20 +20,20 @@ COPY . ./
 
 # Why we copied package.json separetly?
 # ANS: - Optimization technique
-#     - docker trats each line of code as layers and caches them
+#     - docker treats each line of code as layers and caches them
 #     - In development package.json dont chnage frequently
 #     - when there is chnage in particular step it will rerun next steps as well regardless of caching
-#     - so to avoid npm i from everytime there is chnage in code and not in package.json we separated that part
+#     - so to avoid npm i to run everytime there is chnage in code and not in package.json we separated that part
 #     - Next time you run docker build it will be faster
 
 # expose port 3000 and entrypoint to start the code
-# ENV PORT 3000
+ENV PORT 3000
 #expose only expose internal it does not map with host port
 EXPOSE $PORT 
 
 # dev for nodemon
-CMD ["npm", "run", "dev"] 
-# CMD ["node", "index.js"]  
+# CMD ["npm", "run", "dev"] 
+CMD ["node", "index.js"]  
 
 
 # 1. Once docker file done run 'docker build .' here . is location of docker file
@@ -59,6 +65,7 @@ CMD ["npm", "run", "dev"]
 # 14. to make only read only bind mount ad :ro
 #     docker run -p 4000:3000 -v ${pwd}:/app:ro -v /app/node_modules -d --name node-app node-app-image
 # 15. docker rm <containerName> -fv : fv deletes volumes as well as conainers
+# 16. docker stop <contianerName> : to stop running container
 
 
 # How can we make use of enviornment variables?

@@ -1,0 +1,17 @@
+version: "3"
+services: 
+  node-app:
+    build:
+      context: .
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./:/app # bind mount (no need to specify entire path)
+      - /app/node_modules # anonymous volume
+    environment:
+      - NODE_ENV=production
+    command: npm start
+
+# docker-compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d
+# docker-compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d --build
+# docker-compose -f docker-compose.yaml -f docker-compose-prod.yaml down -v

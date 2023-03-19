@@ -1,0 +1,23 @@
+# With yaml files spacing matters
+version: "3"
+services: 
+  composed-node-app: # container name
+    build: . #current diectly (automate build command)
+    ports:
+      - "3000:3000"  # map port with host port
+      # - "4000: 4000"
+    volumes:
+      - ./:/app # bind mount (no need to specify entire path)
+      - /app/node_modules # anonymous volume
+    environment:  # without env will work as we have added those in Dockerfile
+      - PORT=3000
+    # env_file:
+    #   - ./.env
+
+
+# By using docker-compose we can run multiple containers at same time
+# docker compose needs you to build image when there is smoe change
+  # To run docker compose use:
+  #   docker compose up -d  // user --build to force build
+  #   docker down -v // -v to delete volumes
+
